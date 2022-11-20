@@ -17,7 +17,6 @@ app.listen(port, () => {
 });
 
 const {Client, MessageEmbed } = require('discord.js');
-const { isPromise } = require('util/types');
 const bot = new Client();
 
 bot.on('ready', () => {
