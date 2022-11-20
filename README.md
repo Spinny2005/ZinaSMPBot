@@ -1,1 +1,1 @@
-Bot for Zina SMP
+ZINA SMP BOT
