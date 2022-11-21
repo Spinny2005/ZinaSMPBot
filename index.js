@@ -1,4 +1,4 @@
-require('dotenv').config()
+//require('dotenv').config()
 const token = 'MTA0Mzk2MDgyNTkyNjM5Mzg1Ng.GJjbWb.RlxzpidZRRYfpV7a963RmsOkaJdYAFF4qqTdhw';
 
 const express = require('express');
