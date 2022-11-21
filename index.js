@@ -11,6 +11,8 @@ const config = require("./config.js");
 var EventEmitter = require("events").EventEmitter;
 const emitter = new EventEmitter()
 
+//Set channel ID for online/offline messages
+const channelID = '1044340371301343262';
 
 client.commands = new Discord.Collection();
 client.noPrefixCommands = new Discord.Collection();
@@ -23,32 +25,44 @@ const botCommandsLogger = new Console({
 
 client.on("messageCreate", message => {
   
-  let serverIP = 'TheZinaSMP.aternos.me';
-  let ping = require('minecraft-server-util');
-  setTimeout (function() {
-    console.log("\nPinging Server");
-    ping
-      .status(serverIP, {
-        port : 25565,
-        timeout: 5000
-      })
-      .then(response => {
-        console.log("Players Online: " + response.onlinePlayers)
-        let onlineMessage = "```SERVER ONLINE\nServer IP: " + response.host + "\nPlayers Online: " + response.onlinePlayers + "\nMax Players: " + response.maxPlayers + "```";
-        if(response.onlinePlayers > 0) { 
+  if (message.channel.id = channelID) {
+    
+    let serverIP = 'TheZinaSMP.aternos.me';
+    let ping = require('minecraft-server-util');
+
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    
+    setTimeout (function() {
+      console.log(date + " " + time)
+      console.log("\nPinging Server");
+      ping
+        .status(serverIP, {
+          port : 25565,
+          timeout: 5000
+        })
+        .then(response => {
+          console.log("Players Online: " + response.onlinePlayers)
+          
+          let onlineMessage = "```SERVER ONLINE\nServer IP: " + response.host + "\nPlayers Online: " + response.onlinePlayers + "\nMax Players: " + response.maxPlayers + "```";
+      
           if(message.content != onlineMessage) {
-            client.channels.cache.get("1044340371301343262").send(onlineMessage) 
+            client.channels.cache.get(channelID).send(onlineMessage) 
+            console.log("Online Message Sent");
           }
           console.log("ONLINE");
-        } else {
-          if(message.content != "SERVER OFFLINE") {
-            client.channels.cache.get("1044340371301343262").send("SERVER OFFLINE")
+        })
+        .catch(error => {
+          console.error(error);
+          if(message.content != "```SERVER OFFLINE```") {
+            client.channels.cache.get(channelID).send("```SERVER OFFLINE```")
+            console.log("Offline Message Sent");
           }
           console.log("OFFLINE");
-        }
-      })
-  }, 60000);
-  
+        })
+    }, 60000);
+  }
 })
 
 //Bring Bot Online
@@ -90,7 +104,7 @@ client.once('ready', async => {
   client.user.setActivity('on The Zina SMP', { type: 'PLAYING' });
   client.user.setStatus('dnd');
 
-
+  client.channels.cache.get(channelID).send("Zina SMP Bot Online");
   
 })
 
