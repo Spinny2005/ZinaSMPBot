@@ -48,16 +48,20 @@ client.on("messageCreate", message => {
           let onlineMessage = "```SERVER ONLINE\nServer IP: " + response.host + "\nPlayers Online: " + response.onlinePlayers + "\nMax Players: " + response.maxPlayers + "```";
       
           if(message.content != onlineMessage) {
-            client.channels.cache.get(channelID).send(onlineMessage) 
-            console.log("Online Message Sent");
+	    if(message.channel.lastMessage.content != onlineMessage) {
+                client.channels.cache.get(channelID).send(onlineMessage) 
+                console.log("Online Message Sent");
+	    }
           }
           console.log("ONLINE");
         })
         .catch(error => {
           console.error(error);
           if(message.content != "```SERVER OFFLINE```") {
-            client.channels.cache.get(channelID).send("```SERVER OFFLINE```")
-            console.log("Offline Message Sent");
+            if(message.channel.lastMessage.content != "```SERVER OFFLINE```") {
+              client.channels.cache.get(channelID).send("```SERVER OFFLINE```")
+              console.log("Offline Message Sent");
+            }
           }
           console.log("OFFLINE");
         })
